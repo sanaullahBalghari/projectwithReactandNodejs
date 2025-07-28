@@ -22,12 +22,14 @@ app.use(cookieParser())
 //router import
 
 import userRouter from "./routes/user.routes.js";
-
+import categoryRoutes from "./routes/category.routes.js";
+import productRoutes from "./routes/product.routes.js";
 //routes declicaration
 
 // app.use('/users', userRouter)
 app.use('/api/v1/users', userRouter)
-
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
 
 // http:localhost/8000/api/v1/users/register 
 
