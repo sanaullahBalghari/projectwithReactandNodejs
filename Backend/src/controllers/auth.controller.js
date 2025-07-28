@@ -58,17 +58,17 @@ export const registeruser=asyncHandler(async(req, res)=>{
     .json(new ApiResponse(200, createdUser, "User registered successfully"));
 })
 
- export const loginUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+export const loginUser = asyncHandler(async (req, res) => {
+  const { identifier, password } = req.body;
 
-  // username or email check
-  if (!username && !email) {
+  // identifier check (username ya email me se ek)
+  if (!identifier) {
     throw new ApiError(400, "Username or email is required");
   }
 
-  // find the user
+  // find the user by username OR email
   const user = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [{ username: identifier }, { email: identifier }],
   });
 
   if (!user) {
@@ -77,19 +77,14 @@ export const registeruser=asyncHandler(async(req, res)=>{
 
   // password check
   const isPasswordValid = await user.isPasswordCorrect(password);
-
   if (!isPasswordValid) {
     throw new ApiError(401, "Password is incorrect");
   }
 
   // access and refresh token
-  const { accessToken, refreshToken } = await generateAccessandRefreshTokens(
-    user._id
-  );
+  const { accessToken, refreshToken } = await generateAccessandRefreshTokens(user._id);
 
-  const loggedInUser = await User.findById(user._id).select(
-    "-password -refreshToken"
-  );
+  const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
   // send cookies
   const options = {
@@ -113,6 +108,7 @@ export const registeruser=asyncHandler(async(req, res)=>{
       )
     );
 });
+
 
 export const logoutuser=asyncHandler(async(req, res)=>{
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate} from"react-router-dom";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -7,6 +8,8 @@ const Register = () => {
     fullName: "",
     password: ""
   });
+
+  const navigate= useNavigate();
 
   const handleInput = (e) => {
     console.log(e)
@@ -21,20 +24,34 @@ const Register = () => {
     });
   };
 
-  const handleSubmit=async(e)=>{
-    e.preventDefault()
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch("http://localhost:8000/api/v1/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
 
-    const response= await fetch(`http://localhost:8000/api/v1/users/register`,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-            },
-
-            body:JSON.stringify(user)
-    })
-
-    console.log("User registered:", user);
+    
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log(" Register server response data:", data);
+     setUser({username: "", email: "", fullName: "", password: ""});
+      navigate("/login");
+    } else {
+      
+      alert("Registration failed: " + data.message);
+    }
+    console.log(response)
+  } catch (error) {
+    console.log("Register error:", error);
   }
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white shadow-lg rounded-2xl p-6">
