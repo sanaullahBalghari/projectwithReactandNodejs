@@ -4,16 +4,16 @@ import {
   getAllCategories,
   updateCategory,
   deleteCategory,
-} from "../controllers/category.controller.js";
-import { verifyJwt } from "../middlewares/verifyJwt.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
+} from "../controllers/categoryController.js"
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { isAdmin } from "../middlewares/isAdmin.middleware.js";
 
 const router = express.Router();
 
 // Admin-only routes
-router.post("/", verifyJwt, isAdmin, createCategory);
-router.put("/:categoryId", verifyJwt, isAdmin, updateCategory);
-router.delete("/:categoryId", verifyJwt, isAdmin, deleteCategory);
+router.post("/", verifyJWT, isAdmin, createCategory);
+router.put("/:categoryId", verifyJWT, isAdmin, updateCategory);
+router.delete("/:categoryId", verifyJWT, isAdmin, deleteCategory);
 
 // Public route
 router.get("/", getAllCategories);

@@ -5,21 +5,29 @@ import {
   getProductById,
   updateProduct,
   deleteProduct,
-} from "../controllers/product.controller.js";
+} from "../controllers/shop.controller.js";
 
-import { verifyJwt } from "../middlewares/verifyJwt.js";
-import { isAdmin } from "../middlewares/isAdmin.js";
-import { upload } from "../middlewares/multer.middleware.js"; // 👈 your multer setup
+import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { isAdmin } from "../middlewares/isAdmin.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = express.Router();
 
-// Admin-only: create, update, delete
-router.post("/", verifyJwt, isAdmin, upload.single("image"), createProduct);
-router.put("/:productId", verifyJwt, isAdmin, upload.single("image"), updateProduct);
-router.delete("/:productId", verifyJwt, isAdmin, deleteProduct);
+// Admin-only: create
+router.post("/", verifyJWT, isAdmin, upload.single("image"), createProduct);
 
-// Public routes
+
+// get all prodduct Public routes
 router.get("/", getAllProducts);
+
+// Get Product by ID (public)
 router.get("/:productId", getProductById);
+
+// Update Product by ID (admin only)
+router.patch( "/:productId",verifyJWT,isAdmin,upload.single("image"), updateProduct);
+
+// Delete Product by ID (admin only)
+router.delete("/:productId", verifyJWT, isAdmin, deleteProduct);
+
 
 export default router;
