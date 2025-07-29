@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Category } from "../models/Category.models.js";
 import { Product } from "../models/shop.models.js"
 import { uploadOnCloudinary } from "../utils/cloudnairy.js";
+import { Cart } from "../models/cart.models.js";
 
 // Client → Multer (save to /temp) → Upload to Cloudinary → Remove local → Save Cloud URL in DB
 
@@ -119,4 +120,63 @@ export const deleteProduct = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, product, "Product deleted successfully"));
+});
+
+export const addToCart=asyncHandler(async(req, res)=>{
+
+  const userId=req.user._id;
+  const {productId, quantity}=req.body;
+  if(!productId || !quantity){
+    throw new ApiError(400, "Product ID and quantity are required")
+  }
+  let cart = await Cart.findOne({user:userId});
+
+  if(!cart){
+    cart=new Cart({
+    user:userId,
+    items:[{product:productId, quantity}]
+    })
+  }else {
+  
+    const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+
+    if (itemIndex > -1) {
+ 
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+     
+      cart.items.push({ product: productId, quantity });
+    }
+  }
+  await cart.save();
+   return res.status(200).json(new ApiResponse(200, cart, "Added to cart"));
+})
+
+
+export const removeFromCart = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { productId } = req.params;
+
+  const cart = await Cart.findOne({ user: userId });
+  if (!cart) {
+    throw new ApiError(404, "Cart not found");
+  }
+
+  cart.items = cart.items.filter(item => item.product.toString() !== productId);
+  await cart.save();
+
+  return res.status(200).json(new ApiResponse(200, cart, "Item removed from cart"));
+});
+
+
+export const getCart = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+
+  const cart = await Cart.findOne({ user: userId }).populate("items.product");
+
+  if (!cart) {
+    throw new ApiError(404, "Cart not found");
+  }
+
+  return res.status(200).json(new ApiResponse(200, cart, "Cart fetched"));
 });

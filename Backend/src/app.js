@@ -24,14 +24,22 @@ app.use(cookieParser())
 import userRouter from "./routes/user.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import productRoutes from "./routes/product.routes.js";
+import cartRoutes from './routes/cart.routes.js';
+import orderRoutes from "./routes/order.routes.js";
+
 //routes declicaration
 
 // app.use('/users', userRouter)
 app.use('/api/v1/users', userRouter)
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
+
+
 
 // http:localhost/8000/api/v1/users/register 
+// http:localhost/8000/api/orders/place
 
 
 

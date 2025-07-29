@@ -1,0 +1,58 @@
+```plaintext
+/src
+  /components
+    /common
+      Button.jsx
+      Card.jsx
+      Input.jsx
+      Table.jsx
+      Modal.jsx
+      Badge.jsx
+    /layout
+      Navbar.jsx
+      Sidebar.jsx
+    /user
+      ProductCard.jsx
+      CategoryFilter.jsx
+      Pagination.jsx
+      CartItem.jsx
+      OrderCard.jsx
+    /admin
+      DashboardCard.jsx
+      AdminTable.jsx
+  /pages
+    /user
+      Home.jsx
+      ProductList.jsx
+      ProductDetails.jsx
+      Cart.jsx
+      Checkout.jsx
+      MyOrders.jsx
+    /admin
+      Dashboard.jsx
+      ManageProducts.jsx
+      ManageCategories.jsx
+      ManageOrders.jsx
+      ManageUsers.jsx
+  App.jsx
+  index.css
+  index.html
+```
+
+<xaiArtifact artifact_id="ba5cae95-1e31-41b7-baea-61389ac378c2" artifact_version_id="c42a58fc-4f2d-43bb-a452-1d6fb68cc5c9" title="index.html" contentType="text/html">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eCommerce UI</title>
+  <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/babel-standalone@7/babel.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="./src/App.jsx"></script>
+</body>
+</html>
