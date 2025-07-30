@@ -40,6 +40,7 @@ app.use("/api/orders", orderRoutes);
 
 // http:localhost/8000/api/v1/users/register 
 // http:localhost/8000/api/orders/place
+// http:localhost/8000//api/cart
 
 
 

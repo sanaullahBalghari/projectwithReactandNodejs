@@ -180,3 +180,33 @@ export const getCart = asyncHandler(async (req, res) => {
 
   return res.status(200).json(new ApiResponse(200, cart, "Cart fetched"));
 });
+
+
+
+export const updateCartItemQuantity = asyncHandler(async (req, res) => {
+  const userId = req.user._id; // assuming user is authenticated
+  const { productId } = req.params;
+  const { quantity } = req.body;
+
+  if (quantity < 1) {
+    return res.status(400).json({ success: false, message: "Quantity must be at least 1" });
+  }
+
+  const cart = await Cart.findOne({ user: userId });
+
+  if (!cart) {
+    return res.status(404).json({ success: false, message: "Cart not found" });
+  }
+
+  const item = cart.items.find((i) => i.product.toString() === productId);
+
+  if (!item) {
+    return res.status(404).json({ success: false, message: "Item not found in cart" });
+  }
+
+  item.quantity = quantity;
+
+  await cart.save();
+
+  res.status(200).json({ success: true, message: "Quantity updated", data: cart });
+});
