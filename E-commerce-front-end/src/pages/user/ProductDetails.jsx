@@ -34,10 +34,10 @@ function ProductDetails() {
   }, [id]);
 
   const handleAddToCart = async () => {
-    if (product && product.stock >= quantity) {
+    if (product && product.stock >= 1) {
       setAdding(true);
       try {
-        const success = await addToCart(product._id, quantity);
+        const success = await addToCart(product._id, 1);
         if (success) {
           alert(`${product.name} added to cart!`);
         }

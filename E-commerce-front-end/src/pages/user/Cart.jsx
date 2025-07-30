@@ -23,7 +23,7 @@ function Cart() {
       <Card>
         <h2 className="text-2xl font-bold mb-4">Shopping Cart</h2>
         {loading && <p className="text-gray-600 text-center">Loading cart...</p>}
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+        {/* {error && <p className="text-red-500 text-center mb-4">{error}</p>} */}
 
         {!loading && cartItems.length > 0 ? (
           <>

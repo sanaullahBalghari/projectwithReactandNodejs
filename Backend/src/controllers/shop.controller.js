@@ -210,3 +210,4 @@ export const updateCartItemQuantity = asyncHandler(async (req, res) => {
 
   res.status(200).json({ success: true, message: "Quantity updated", data: cart });
 });
+

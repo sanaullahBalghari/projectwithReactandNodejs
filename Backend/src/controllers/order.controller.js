@@ -4,7 +4,7 @@ import { Product } from "../models/shop.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-
+import { User } from "../models/user.models.js";
 export const placeOrder = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const { fullName, phone, address, city, postalCode } = req.body;
@@ -77,6 +77,7 @@ export const placeOrder = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, order, "Order placed successfully"));
 });
 
+// get signle order details 
 export const getOrderDetails = asyncHandler(async (req, res) => {
   const orderId = req.params.orderId;
 
@@ -94,7 +95,7 @@ export const getOrderDetails = asyncHandler(async (req, res) => {
 });
 
 
-// get all order list  for admin
+// get alll orders of logged in user 
 export const getMyOrders = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
@@ -102,13 +103,54 @@ export const getMyOrders = asyncHandler(async (req, res) => {
     .populate("items.product", "name price images")
     .sort({ createdAt: -1 });
 
-  if (!orders || orders.length === 0) {
-    throw new ApiError(404, "No orders found for this user");
-  }
-
   return res.status(200).json(
     new ApiResponse(200, orders, "User orders fetched successfully")
   );
 });
 
 
+// get all orders wihtout any filter for admin 
+export const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find()
+    .populate("user", "name email")
+    .populate("items.product", "name price images")
+    .sort({ createdAt: -1 });
+
+  return res.status(200).json(new ApiResponse(200, orders, "All orders fetched successfully"));
+});
+
+// order status update by admin 
+export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { orderId } = req.params;
+  const { status } = req.body;
+
+  const order = await Order.findById(orderId);
+  if (!order) throw new ApiError(404, "Order not found");
+
+  order.status = status;
+  await order.save();
+
+  return res.status(200).json(new ApiResponse(200, order, "Order status updated successfully"));
+});
+
+
+// dashboard home stst 
+export const getDashboardStats = asyncHandler(async (req, res) => {
+  const totalUsers = await User.countDocuments();
+  const totalProducts = await Product.countDocuments();
+  const totalOrders = await Order.countDocuments();
+  const totalRevenueAgg = await Order.aggregate([
+    { $group: { _id: null, total: { $sum: "$totalAmount" } } }
+  ]);
+
+  const totalRevenue = totalRevenueAgg[0]?.total || 0;
+
+  return res.status(200).json(
+    new ApiResponse(200, {
+      totalUsers,
+      totalProducts,
+      totalOrders,
+      totalRevenue,
+    })
+  );
+});
