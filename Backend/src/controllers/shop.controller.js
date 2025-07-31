@@ -5,7 +5,7 @@ import { Category } from "../models/Category.models.js";
 import { Product } from "../models/shop.models.js"
 import { uploadOnCloudinary } from "../utils/cloudnairy.js";
 import { Cart } from "../models/cart.models.js";
-
+import mongoose from "mongoose";
 // Client → Multer (save to /temp) → Upload to Cloudinary → Remove local → Save Cloud URL in DB
 
 
@@ -49,15 +49,42 @@ export const createProduct = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, product, "Product created successfully"));
 });
 
+
+
+
 export const getAllProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find()
-    .populate("category", "name") // only return category name
-    .sort({ createdAt: -1 }); // latest first
+  const { category, inStock, minPrice, maxPrice } = req.query;
+
+  let filter = {};
+
+  // ✅ Category filter
+  if (category && mongoose.Types.ObjectId.isValid(category)) {
+    filter.category = category;
+  }
+
+  // ✅ Stock filter
+  if (inStock === "true") {
+    filter.stock = { $gt: 0 };
+  }
+
+  // ✅ Price range filter
+  if (minPrice || maxPrice) {
+    filter.price = {};
+    if (minPrice) filter.price.$gte = parseFloat(minPrice);
+    if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
+  }
+
+  const products = await Product.find(filter)
+    .populate("category", "name")
+    .sort({ createdAt: -1 });
 
   return res
     .status(200)
     .json(new ApiResponse(200, products, "Products fetched successfully"));
 });
+
+
+
 
 export const getProductById = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.productId).populate("category", "name");

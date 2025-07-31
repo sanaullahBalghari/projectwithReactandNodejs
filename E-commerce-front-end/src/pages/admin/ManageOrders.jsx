@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sidebar from '../../components/layout/Sidebar.jsx';
 import Table from '../../components/common/Table.jsx';
 import Badge from '../../components/common/Badge.jsx';
-
+import Spinner from '../../components/common/Spinner.jsx';
 function ManageOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +33,9 @@ function ManageOrders() {
         <h2 className="text-2xl font-bold mb-6">Manage Orders</h2>
 
         {loading ? (
-          <p>Loading orders...</p>
+         <div className="flex justify-center mt-10">
+          <Spinner />
+        </div>
         ) : orders.length === 0 ? (
           <p>No orders found.</p>
         ) : (

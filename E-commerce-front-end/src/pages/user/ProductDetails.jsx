@@ -4,7 +4,7 @@ import axios from "axios";
 import Card from "../../components/common/Card.jsx";
 import Button from "../../components/common/Button.jsx";
 import { useCart } from "../../context/CartContext";
-
+import Spinner from "../../components/common/Spinner.jsx";
 function ProductDetails() {
   const { id } = useParams();
   const { addToCart } = useCart();
@@ -52,7 +52,9 @@ function ProductDetails() {
   };
 
   if (loading)
-    return <div className="text-center mt-10 text-gray-600">Loading...</div>;
+    return  <div className="flex justify-center mt-10">
+          <Spinner />
+        </div>
   if (error)
     return <div className="text-center mt-10 text-red-500">{error}</div>;
   if (!product)

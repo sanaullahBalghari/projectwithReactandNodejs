@@ -16,29 +16,33 @@ import ManageUsers from './pages/admin/ManageUsers.jsx';
 import AddProduct from './pages/admin/AddProduct.jsx';
 import AddCategory from './pages/admin/AddCategory.jsx';
 import Navbar from './components/layout/Navbar.jsx';
-
+import EditCategory from './pages/admin/EditCategory.jsx';
+import EditProduct from './pages/admin/EditProduct.jsx';
 function App() {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100">
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<ProductList />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/orders" element={<MyOrders />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Dashboard />} />
-          <Route path="/admin/products" element={<ManageProducts />} />
-          <Route path="/admin/categories" element={<ManageCategories />} />
-          <Route path="/admin/orders" element={<ManageOrders />} />
-          <Route path="/admin/users" element={<ManageUsers />} />
-          <Route path="/admin/add-product" element={<AddProduct />} />
-          <Route path="/admin/add-category" element={<AddCategory />} />
-        </Routes>
+       <Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/products" element={<ProductList />} />
+  <Route path="/product/:id" element={<ProductDetails />} />
+  <Route path="/cart" element={<Cart />} />
+  <Route path="/checkout" element={<Checkout />} />
+  <Route path="/orders" element={<MyOrders />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
+  <Route path="/admin" element={<Dashboard />} />
+  <Route path="/admin/products" element={<ManageProducts />} />
+  <Route path="/admin/categories" element={<ManageCategories />} />
+  <Route path="/admin/orders" element={<ManageOrders />} />
+  <Route path="/admin/users" element={<ManageUsers />} />
+  <Route path="/admin/add-product" element={<AddProduct />} />
+  <Route path="/admin/add-category" element={<AddCategory />} />
+  <Route path="/admin/edit-category/:id" element={<EditCategory />} />
+  <Route path="/admin/edit-product/:productId" element={<EditProduct />} />
+</Routes>
+
       </div>
     </Router>
   );

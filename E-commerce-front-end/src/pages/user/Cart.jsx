@@ -4,7 +4,7 @@ import CartItem from '../../components/user/CartItem';
 import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import { Link } from 'react-router-dom';
-
+import Spinner from '../../components/common/Spinner';
 function Cart() {
   const { cart, fetchCart, error, loading } = useCart();
   const cartItems = cart?.items || []; // 
@@ -22,7 +22,9 @@ function Cart() {
     <div className="container mx-auto p-4">
       <Card>
         <h2 className="text-2xl font-bold mb-4">Shopping Cart</h2>
-        {loading && <p className="text-gray-600 text-center">Loading cart...</p>}
+        {loading &&  <div className="flex justify-center mt-10">
+          <Spinner />
+        </div>}
         {/* {error && <p className="text-red-500 text-center mb-4">{error}</p>} */}
 
         {!loading && cartItems.length > 0 ? (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import OrderCard from '../../components/user/OrderCard.jsx';
 import Card from '../../components/common/Card.jsx'; // optional if needed
-
+import Spinner from '../../components/common/Spinner.jsx';
 function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +29,9 @@ function MyOrders() {
       <h2 className="text-2xl font-bold mb-4">My Orders</h2>
 
       {loading ? (
-        <p>Loading...</p>
+      <div className="flex justify-center mt-10">
+          <Spinner />
+        </div>
       ) : orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
